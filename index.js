@@ -131,13 +131,26 @@ async function run() {
             }
             const result = await UserCollection.updateOne(filter, updatedoc, option)
             res.json(result) 
-        })
+        }) 
     //--------------USER API-------------//
         //user geting all blogs
         app.get('/getBlogs', async (req, res) => {
             const cursor = TravelBlogCollection.find({})
-            const result = await cursor.toArray()
-            res.send(result)
+            const page = req.query.page;
+            const size = parseInt(req.query.size);
+            let result;
+            const count = await cursor.count()
+            if(page)
+            {
+                 result = await cursor.skip(page * size).limit(size).toArray()
+            }
+            else{
+                result = await cursor.toArray();
+            }
+            res.send({
+                result,
+                count
+            })
         })
         //user geting individual blog detials
         app.get('/getSingleBlock/:id', async (req, res) => {
