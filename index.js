@@ -110,12 +110,12 @@ async function run() {
             const id = req.params.id;
             const filter = {_id: ObjectId(id)}
             const data = req.body;
-            const front = req.files.img.data;
+            // const front = req.files.img.data;
             
-            const encodedpic1 = front.toString('base64');
-            const img = Buffer.from(encodedpic1, 'base64');
+            // const encodedpic1 = front.toString('base64');
+            // const img = Buffer.from(encodedpic1, 'base64');
 
-            const blog = {...data, img};
+            const blog = {...data};
             const option = {upsert: true}
             const updatedoc = {
                 $set: {
