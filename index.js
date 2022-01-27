@@ -32,7 +32,19 @@ async function run() {
                 const result = await UserCollection.insertOne(user)
                 res.json(result)
             })
-    
+            //checking admin or not
+            app.get('/checkAdmin', async (req, res) => {
+                const email = req.query.email
+                const query = {email: email}
+                const user = await UserCollection.findOne(query)
+                if(user.role === 'admin')
+                {
+                    res.send({isadmin: true})
+                }
+                else{
+                    res.send('false')
+                }
+            })
         // ---------------ADMIN API----------------//
 
         //admin adding new blog information
@@ -131,7 +143,15 @@ async function run() {
             }
             const result = await UserCollection.updateOne(filter, updatedoc, option)
             res.json(result) 
-        }) 
+        })
+        //amdin deleting blogs 
+        app.delete('/deleteblog/:id', async (req, res) => {
+            const id = req.params.id
+            const query = {_id: ObjectId(id)}
+            const result = await TravelBlogCollection.deleteOne(query)
+            res.send(result)
+        })
+        
     //--------------USER API-------------//
         //user geting all blogs
         app.get('/getBlogs', async (req, res) => {
@@ -170,6 +190,17 @@ async function run() {
             const blog = {...data, img};
             const result = await UserExperienceCollection.insertOne(blog)
             res.json(result) 
+        })
+        //lower expense 
+        app.get('/getLowExpense', async (req, res) => {
+            const query = { cost: { $lt: '2500' } };
+            const result = await TravelBlogCollection.find(query).toArray();
+            res.send(result)
+        })
+        app.get('/getTopRatedPlace', async (req, res) => {
+            const query = { rate: { $gt: '4' } };
+            const result = await TravelBlogCollection.find(query).toArray();
+            res.send(result)
         })
     }
     finally{
