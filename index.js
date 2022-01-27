@@ -97,7 +97,7 @@ async function run() {
             const cursor = TravelBlogCollection.find({})
             const result = await cursor.toArray()
             res.send(result)
-        })
+        }) 
         //geting blog for edit
         app.get('/getBlogForEdit/:id', async (req, res) => {
             const id = req.params.id
@@ -217,3 +217,4 @@ app.get('/', (req, res) => {
 app.listen(port, (req, res) => {
     console.log('Server Port Is', port)
 })
+//done
